@@ -1,0 +1,59 @@
+import { JwtPayload } from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import { envVars } from "../config/env";
+import { jwtManagement } from "../utils/jwtManagement";
+import { isActive, Role } from "../utils/commonUserInterface";
+import { IAdmin } from "../modules/admin/admin.interface";
+import { IStudent } from "../modules/student/student.interface";
+import { Student } from "../modules/student/student.model";
+import { Admin } from "../modules/admin/admin.model";
+
+export const roleBasedProtection =
+  (...roles: string[]) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    const accessToken = req.headers.authorization;
+
+    if (!accessToken) {
+      throw new Error("access token not found!");
+    }
+
+    const userInfoJWTAccessToken = jwtManagement.verifyToken(
+      accessToken,
+      envVars.JWT_ACCESS_SECRET
+    ) as JwtPayload;
+
+    let user: IStudent | IAdmin | null = null;
+
+    if (userInfoJWTAccessToken.role === Role.STUDENT) {
+      user = await Student.findOne({ email: userInfoJWTAccessToken.email });
+    } else {
+      user = await Admin.findOne({ email: userInfoJWTAccessToken.email });
+    }
+
+    if (!user) {
+      throw new Error("user found!");
+    }
+
+    if (
+      user?.isActive === isActive.BLOCKED ||
+      user?.isActive === isActive.INACTIVE
+    ) {
+      throw new Error(`user is ${user?.isActive}!`);
+    }
+
+    if (user?.isDeleted) {
+      throw new Error("user is deleted!");
+    }
+
+    if (!user?.isVerified) {
+      throw new Error("user is not verified!");
+    }
+
+    if (!Object.values(roles).includes(userInfoJWTAccessToken.role)) {
+      throw new Error("You are not permitted to view this route!!!");
+    }
+
+    req.user = userInfoJWTAccessToken;
+
+    next();
+  };

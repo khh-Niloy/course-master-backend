@@ -1,0 +1,92 @@
+import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
+import { envVars } from "../config/env";
+import { IAdmin } from "../modules/admin/admin.interface";
+import { IStudent } from "../modules/student/student.interface";
+import { Student } from "../modules/student/student.model";
+import { Admin } from "../modules/admin/admin.model";
+import { Role } from "./commonUserInterface";
+
+const generateToken = (
+  jwtPayload: JwtPayload,
+  jwtSecret: string,
+  jwtExpiresIn: string
+) => {
+  const accessToken = jwt.sign(jwtPayload, jwtSecret, {
+    expiresIn: jwtExpiresIn,
+  } as SignOptions);
+  return accessToken;
+};
+
+const verifyToken = (accessTokenPayLoad: string, jwtSecret: string) => {
+  const accessToken = jwt.verify(accessTokenPayLoad, jwtSecret);
+  return accessToken;
+};
+
+export const createAccessAndRefreshToken = (jwtPayload: JwtPayload) => {
+  const accessToken = generateToken(
+    jwtPayload,
+    envVars.JWT_ACCESS_SECRET,
+    envVars.JWT_ACCESS_EXPIRES
+  );
+
+  const refreshToken = generateToken(
+    jwtPayload,
+    envVars.JWT_REFRESH_SECRET,
+    envVars.JWT_REFRESH_EXPIRES
+  );
+
+  return { accessToken, refreshToken };
+};
+
+export const getNewAccessTokenFromRefreshToken = async (
+  refreshToken: string
+) => {
+  const userInfoFromRefreshToken = verifyToken(
+    refreshToken,
+    envVars.JWT_REFRESH_SECRET
+  );
+
+  if (!userInfoFromRefreshToken) {
+    throw new Error("refresh token does not exist");
+  }
+
+  let user: IStudent | IAdmin | null = null;
+
+  if ((userInfoFromRefreshToken as JwtPayload).role === Role.STUDENT) {
+    user = await Student.findById(
+      (userInfoFromRefreshToken as JwtPayload).userId
+    );
+  } else {
+    user = await Admin.findById(
+      (userInfoFromRefreshToken as JwtPayload).userId
+    );
+  }
+
+  if (!user) {
+    throw new Error("user does not exist");
+  }
+
+  const jwtPayload = {
+    userId: user._id,
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = generateToken(
+    jwtPayload,
+    envVars.JWT_ACCESS_SECRET,
+    envVars.JWT_ACCESS_EXPIRES
+  );
+
+  return {
+    newAccessToken: accessToken,
+    user: user,
+  };
+};
+
+export const jwtManagement = {
+  generateToken,
+  verifyToken,
+  createAccessAndRefreshToken,
+  getNewAccessTokenFromRefreshToken,
+};

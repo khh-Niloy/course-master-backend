@@ -12,6 +12,7 @@ interface IEnvVars {
   JWT_REFRESH_EXPIRES: string;
   ADMIN_EMAIL: string;
   ADMIN_PASSWORD: string;
+  FRONTEND_URL: string;
 }
 
 const loadEnvVars = (): IEnvVars => {
@@ -26,6 +27,7 @@ const loadEnvVars = (): IEnvVars => {
     "JWT_REFRESH_EXPIRES",
     "ADMIN_EMAIL",
     "ADMIN_PASSWORD",
+    "FRONTEND_URL",
   ];
   requiredEnvVar.forEach((key) => {
     if (!process.env[key]) {
@@ -43,6 +45,7 @@ const loadEnvVars = (): IEnvVars => {
     JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES as string,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
+    FRONTEND_URL: process.env.FRONTEND_URL as string,
   };
 };
 
