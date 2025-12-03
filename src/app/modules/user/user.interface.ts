@@ -1,5 +1,4 @@
 import { Types } from "mongoose";
-import { IauthProvider, isActive, Role } from "../../utils/commonUserInterface";
 
 export enum EnrollmentStatus {
   ENROLLED = "ENROLLED",
@@ -16,7 +15,23 @@ export interface ICourseEnrollment {
   certificateIssued?: boolean;
 }
 
-export interface IStudent {
+export enum Role {
+  ADMIN = "ADMIN",
+  STUDENT = "STUDENT",
+}
+
+export enum isActive {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  BLOCKED = "BLOCKED",
+}
+
+export interface IauthProvider {
+  provider: "google" | "credential";
+  providerId: string;
+}
+
+export interface IUser {
   _id?: Types.ObjectId;
   name: string;
   email: string;
@@ -29,7 +44,7 @@ export interface IStudent {
   isActive?: isActive;
   isVerified?: boolean;
 
-  role: Role.STUDENT;
+  role: Role;
   auths: IauthProvider[];
 
   enrollments: ICourseEnrollment[];

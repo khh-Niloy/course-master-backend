@@ -70,6 +70,9 @@ const lessonSchema = new Schema<ILesson>(
     duration: {
       type: Number,
     },
+    assignment: {
+      type: assignmentSchema,
+    },
   },
   {
     versionKey: false,
@@ -85,9 +88,6 @@ const courseModuleSchema = new Schema<ICourseModule>(
     lessons: {
       type: [lessonSchema],
       required: true,
-    },
-    assignment: {
-      type: assignmentSchema,
     },
     quiz: {
       type: [quizQuestionSchema],

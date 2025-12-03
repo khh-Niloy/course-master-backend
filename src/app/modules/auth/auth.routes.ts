@@ -1,13 +1,11 @@
 import { Router } from "express";
 import { authController } from "./auth.controller";
-import { Role } from "../../utils/commonUserInterface";
 import { roleBasedProtection } from "../../middleware/roleBasedProtection";
+import { Role } from "../user/user.interface";
 
 export const authRoutes = Router();
 
-authRoutes.post("/login", authController.studentLogin);
-
-authRoutes.post("/admin-login", authController.adminLogin);
+authRoutes.post("/login", authController.userLogin);
 
 authRoutes.post("/refresh-token", authController.getNewAccessToken);
 

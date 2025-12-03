@@ -1,11 +1,11 @@
 import bcryptjs from "bcryptjs";
 import { envVars } from "../config/env";
-import { Admin } from "../modules/admin/admin.model";
-import { IauthProvider, Role } from "./commonUserInterface";
-import { IAdmin } from "../modules/admin/admin.interface";
+import { IauthProvider, Role } from "../modules/user/user.interface";
+import { IUser } from "../modules/user/user.interface";
+import { User } from "../modules/user/user.model";
 
 export const seedSuperAdmin = async () => {
-  const user = await Admin.findOne({ email: envVars.ADMIN_EMAIL });
+  const user = await User.findOne({ email: envVars.ADMIN_EMAIL });
 
   if (user) {
     return;
@@ -21,7 +21,7 @@ export const seedSuperAdmin = async () => {
     providerId: envVars.ADMIN_EMAIL,
   };
 
-  const playLoad: Partial<IAdmin> = {
+  const playLoad: Partial<IUser> = {
     name: "niloy admin",
     email: envVars.ADMIN_EMAIL,
     password: hashedPassword,
@@ -29,5 +29,5 @@ export const seedSuperAdmin = async () => {
     role: Role.ADMIN,
   };
 
-  await Admin.create(playLoad);
+  await User.create(playLoad);
 };

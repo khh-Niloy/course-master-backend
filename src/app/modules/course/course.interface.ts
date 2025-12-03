@@ -5,6 +5,7 @@ export interface ILesson {
   title: string;
   videoUrl: string;
   duration?: number;
+  assignment?: IAssignment;
 }
 
 export interface IAssignment {
@@ -28,7 +29,6 @@ export interface ICourseModule {
   _id?: Types.ObjectId;
   title: string;
   lessons: ILesson[];
-  assignment?: IAssignment;
   quiz?: IQuizQuestion[];
 }
 

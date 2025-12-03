@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Role } from "../../utils/commonUserInterface";
+import { Role } from "../user/user.interface";
 import { roleBasedProtection } from "../../middleware/roleBasedProtection";
 import { courseController } from "./course.controller";
 

@@ -15,12 +15,12 @@ export const createCourseZodSchema = z.object({
           title: z.string({ message: "Title is required" }),
           videoUrl: z.string({ message: "Video URL is required" }),
           duration: z.number({ message: "Duration is required" }),
+          assignment: z.object({
+            question: z.string({ message: "Question is required" }),
+            instructions: z.string({ message: "Instructions are required" }),
+          }).optional(),
         })
       ),
-      assignment: z.object({
-        question: z.string({ message: "Question is required" }),
-        instructions: z.string({ message: "Instructions are required" }),
-      }),
       quiz: z.array(
         z.object({
           question: z.string({ message: "Question is required" }),

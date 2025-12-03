@@ -2,11 +2,8 @@ import { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { envVars } from "../config/env";
 import { jwtManagement } from "../utils/jwtManagement";
-import { isActive, Role } from "../utils/commonUserInterface";
-import { IAdmin } from "../modules/admin/admin.interface";
-import { IStudent } from "../modules/student/student.interface";
-import { Student } from "../modules/student/student.model";
-import { Admin } from "../modules/admin/admin.model";
+import { isActive } from "../modules/user/user.interface";
+import { User } from "../modules/user/user.model";
 
 export const roleBasedProtection =
   (...roles: string[]) =>
@@ -24,13 +21,7 @@ export const roleBasedProtection =
       envVars.JWT_ACCESS_SECRET
     ) as JwtPayload;
 
-    let user: IStudent | IAdmin | null = null;
-
-    if (userInfoJWTAccessToken.role === Role.STUDENT) {
-      user = await Student.findOne({ email: userInfoJWTAccessToken.email });
-    } else {
-      user = await Admin.findOne({ email: userInfoJWTAccessToken.email });
-    }
+    const user = await User.findById(userInfoJWTAccessToken.userId);
 
     if (!user) {
       throw new Error("user found!");

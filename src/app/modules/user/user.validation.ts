@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const studentCreateZodSchema = z.object({
+export const userCreateZodSchema = z.object({
   name: z
     .string({ message: "Name is required" })
     .min(2, { message: "Name must be at least 2 characters long." })

@@ -1,10 +1,6 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import { envVars } from "../config/env";
-import { IAdmin } from "../modules/admin/admin.interface";
-import { IStudent } from "../modules/student/student.interface";
-import { Student } from "../modules/student/student.model";
-import { Admin } from "../modules/admin/admin.model";
-import { Role } from "./commonUserInterface";
+import { User } from "../modules/user/user.model";
 
 const generateToken = (
   jwtPayload: JwtPayload,
@@ -50,17 +46,7 @@ export const getNewAccessTokenFromRefreshToken = async (
     throw new Error("refresh token does not exist");
   }
 
-  let user: IStudent | IAdmin | null = null;
-
-  if ((userInfoFromRefreshToken as JwtPayload).role === Role.STUDENT) {
-    user = await Student.findById(
-      (userInfoFromRefreshToken as JwtPayload).userId
-    );
-  } else {
-    user = await Admin.findById(
-      (userInfoFromRefreshToken as JwtPayload).userId
-    );
-  }
+  const user = await User.findById((userInfoFromRefreshToken as JwtPayload).userId);
 
   if (!user) {
     throw new Error("user does not exist");

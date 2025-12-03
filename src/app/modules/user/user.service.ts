@@ -1,17 +1,16 @@
 import { envVars } from "../../config/env";
-import { IStudent } from "./student.interface";
-import { IauthProvider } from "../../utils/commonUserInterface";
-import { Student } from "./student.model";
+import { IauthProvider, IUser } from "./user.interface";
+import { User } from "./user.model";
 import bcryptjs from "bcryptjs";
 import { logger } from "../../utils/logger";
 import { jwtManagement } from "../../utils/jwtManagement";
 
-const createStudentService = async (playLoad: Partial<IStudent>) => {
+const createUserService = async (playLoad: Partial<IUser>) => {
   const { email, password, ...rest } = playLoad;
   logger.log(playLoad, "playLoad in createStudentService"); 
 
-  const isStudentExist = await Student.findOne({ email });
-  if (isStudentExist) {
+  const isUserExist = await User.findOne({ email });
+  if (isUserExist) {
     throw new Error("You already have an account, please login");
   }
 
@@ -25,7 +24,7 @@ const createStudentService = async (playLoad: Partial<IStudent>) => {
     providerId: email as string,
   };
 
-  const newCreatedStudent = await Student.create({
+  const newCreatedUser = await User.create({
     email,
     password: hashedPassword,
     auths: [authProvider],
@@ -33,16 +32,16 @@ const createStudentService = async (playLoad: Partial<IStudent>) => {
   });
 
   const jwtPayload = {
-    userId: newCreatedStudent._id,
-    email: newCreatedStudent.email,
-    role: newCreatedStudent.role,
+    userId: newCreatedUser._id,
+    email: newCreatedUser.email,
+    role: newCreatedUser.role,
   };
 
   const { accessToken, refreshToken } = jwtManagement.createAccessAndRefreshToken(jwtPayload);
 
-  return { accessToken, refreshToken, student: newCreatedStudent };
+  return { accessToken, refreshToken, user: newCreatedUser };
 };
 
-export const studentService = {
-  createStudentService,
+export const userService = {
+  createUserService,
 };

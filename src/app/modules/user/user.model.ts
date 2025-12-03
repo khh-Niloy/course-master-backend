@@ -1,11 +1,12 @@
 import { model, Schema } from "mongoose";
-import { IauthProvider, isActive, Role } from "../../utils/commonUserInterface";
 import {
-  IStudent,
   ICourseEnrollment,
   EnrollmentStatus,
-} from "./student.interface";
-
+  IUser,
+  IauthProvider,
+  isActive,
+  Role,
+} from "./user.interface";
 const authProviderSchema = new Schema<IauthProvider>(
   {
     provider: {
@@ -58,7 +59,7 @@ const courseEnrollmentSchema = new Schema<ICourseEnrollment>(
   }
 );
 
-const studentSchema = new Schema<IStudent>(
+const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -100,6 +101,7 @@ const studentSchema = new Schema<IStudent>(
     role: {
       type: String,
       enum: Object.values(Role),
+      required: true,
       default: Role.STUDENT,
     },
     auths: {
@@ -134,4 +136,4 @@ const studentSchema = new Schema<IStudent>(
   }
 );
 
-export const Student = model<IStudent>("Student", studentSchema);
+export const User = model<IUser>("User", userSchema);

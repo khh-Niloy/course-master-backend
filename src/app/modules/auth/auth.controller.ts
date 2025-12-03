@@ -5,9 +5,11 @@ import { logger } from "../../utils/logger";
 import { cookiesManagement } from "../../utils/cookiesManagement";
 import { JwtPayload } from "jsonwebtoken";
 
-const studentLogin = async (req: Request, res: Response) => {
+const userLogin = async (req: Request, res: Response) => {
   try {
-    const loggedInUser = await authService.studentLoginService(req.body as {email: string, password: string});
+    const loggedInUser = await authService.userLoginService(
+      req.body as { email: string; password: string }
+    );
 
     cookiesManagement.setCookie(
       res,
@@ -21,28 +23,7 @@ const studentLogin = async (req: Request, res: Response) => {
       data: loggedInUser,
     });
   } catch (error) {
-    logger.log(error as Error, "error in studentLogin");
-    errorResponse(res, error as Error, 400);
-  }
-};
-
-const adminLogin = async (req: Request, res: Response) => {
-  try {
-    const loggedInUser = await authService.adminLoginService(req.body as {email: string, password: string});
-
-    cookiesManagement.setCookie(
-      res,
-      loggedInUser.accessToken,
-      loggedInUser.refreshToken
-    );
-    successResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: "admin log in successful",
-      data: loggedInUser,
-    });
-  } catch (error) {
-    logger.log(error as Error, "error in adminLogin");
+    logger.log(error as Error, "error in userLogin");
     errorResponse(res, error as Error, 400);
   }
 };
@@ -85,7 +66,7 @@ const userLogOut = async (req: Request, res: Response) => {
 
 const getMe = async (req: Request, res: Response) => {
   try {
-    const userInfo = req.user
+    const userInfo = req.user;
     const me = await authService.getMeService(userInfo as JwtPayload);
     successResponse(res, {
       statusCode: 200,
@@ -99,8 +80,7 @@ const getMe = async (req: Request, res: Response) => {
 };
 
 export const authController = {
-  studentLogin,
-  adminLogin,
+  userLogin,
   getNewAccessToken,
   userLogOut,
   getMe,
