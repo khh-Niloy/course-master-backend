@@ -3,13 +3,16 @@ import { IStudent } from "./student.interface";
 import { IauthProvider } from "../../utils/commonUserInterface";
 import { Student } from "./student.model";
 import bcryptjs from "bcryptjs";
+import { logger } from "../../utils/logger";
+import { jwtManagement } from "../../utils/jwtManagement";
 
 const createStudentService = async (playLoad: Partial<IStudent>) => {
   const { email, password, ...rest } = playLoad;
+  logger.log(playLoad, "playLoad in createStudentService"); 
 
   const isStudentExist = await Student.findOne({ email });
   if (isStudentExist) {
-    throw new Error("Student already exist");
+    throw new Error("You already have an account, please login");
   }
 
   const hashedPassword = await bcryptjs.hash(
@@ -28,7 +31,16 @@ const createStudentService = async (playLoad: Partial<IStudent>) => {
     auths: [authProvider],
     ...rest,
   });
-  return newCreatedStudent;
+
+  const jwtPayload = {
+    userId: newCreatedStudent._id,
+    email: newCreatedStudent.email,
+    role: newCreatedStudent.role,
+  };
+
+  const { accessToken, refreshToken } = jwtManagement.createAccessAndRefreshToken(jwtPayload);
+
+  return { accessToken, refreshToken, student: newCreatedStudent };
 };
 
 export const studentService = {

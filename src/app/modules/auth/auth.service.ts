@@ -1,11 +1,12 @@
 import { Model } from "mongoose";
 import { Student } from "../student/student.model";
-import { isActive } from "../../utils/commonUserInterface";
+import { isActive, Role } from "../../utils/commonUserInterface";
 import bcryptjs from "bcryptjs";
 import { IStudent } from "../student/student.interface";
 import { IAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.model";
 import { jwtManagement } from "../../utils/jwtManagement";
+import { JwtPayload } from "jsonwebtoken";
 
 const studentLoginService = async (playLoad: {
   email: string;
@@ -22,18 +23,35 @@ const adminLoginService = async (playLoad: {
 };
 
 const getNewAccessTokenService = async (refreshToken: string) => {
-  const newAccessstoken = jwtManagement.getNewAccessTokenFromRefreshToken(refreshToken);
+  const newAccessstoken =
+    jwtManagement.getNewAccessTokenFromRefreshToken(refreshToken);
   return newAccessstoken;
+};
+
+const getMeService = async (userInfo: JwtPayload) => {
+  let meUser: IStudent | IAdmin | null = null;
+  if (userInfo.role === Role.STUDENT) {
+    meUser = await Student.findById(userInfo.userId).select("-password");
+  } else {
+    meUser = await Admin.findById(userInfo.userId).select("-password");
+  }
+  if (!meUser) {
+    throw new Error("user not found!");
+  }
+  return meUser;
 };
 
 export const authService = {
   studentLoginService,
   getNewAccessTokenService,
   adminLoginService,
+  getMeService,
 };
 
-
-const commonLoginService = async (modelName: string, playLoad: {email: string, password: string}) => {
+const commonLoginService = async (
+  modelName: string,
+  playLoad: { email: string; password: string }
+) => {
   const { email, password } = playLoad;
 
   const model = modelName === "student" ? Student : Admin;
@@ -74,7 +92,8 @@ const commonLoginService = async (modelName: string, playLoad: {email: string, p
     role: user.role,
   };
 
-  const { accessToken, refreshToken } = jwtManagement.createAccessAndRefreshToken(jwtPayload);
+  const { accessToken, refreshToken } =
+    jwtManagement.createAccessAndRefreshToken(jwtPayload);
 
   return { accessToken, refreshToken, user: user };
-}
+};

@@ -3,12 +3,16 @@ import { studentService } from "./student.service";
 import { IStudent } from "./student.interface";
 import { errorResponse, successResponse } from "../../utils/successResponse";
 import { logger } from "../../utils/logger";
+import { cookiesManagement } from "../../utils/cookiesManagement";
 
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const student = await studentService.createStudentService(
+    logger.log(req.body, "req.body in createStudent");
+    const { accessToken, refreshToken, student } = await studentService.createStudentService(
       req.body as Partial<IStudent>
     );
+    cookiesManagement.setCookie(res, accessToken, refreshToken);
+    
     successResponse(res, {
       statusCode: 201,
       success: true,

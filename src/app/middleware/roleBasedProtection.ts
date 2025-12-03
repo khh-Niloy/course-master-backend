@@ -11,11 +11,13 @@ import { Admin } from "../modules/admin/admin.model";
 export const roleBasedProtection =
   (...roles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
-    const accessToken = req.headers.authorization;
+    const accessToken = req.cookies.accessToken;
 
     if (!accessToken) {
       throw new Error("access token not found!");
     }
+
+    console.log({ accessToken });
 
     const userInfoJWTAccessToken = jwtManagement.verifyToken(
       accessToken,
@@ -45,9 +47,9 @@ export const roleBasedProtection =
       throw new Error("user is deleted!");
     }
 
-    if (!user?.isVerified) {
-      throw new Error("user is not verified!");
-    }
+    // if (!user?.isVerified) {
+    //   throw new Error("user is not verified!");
+    // }
 
     if (!Object.values(roles).includes(userInfoJWTAccessToken.role)) {
       throw new Error("You are not permitted to view this route!!!");

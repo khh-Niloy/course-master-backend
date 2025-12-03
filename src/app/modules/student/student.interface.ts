@@ -25,9 +25,9 @@ export interface IStudent {
   picture?: string;
   address?: string;
 
-  isDeleted: boolean;
-  isActive: isActive;
-  isVerified: boolean;
+  isDeleted?: boolean;
+  isActive?: isActive;
+  isVerified?: boolean;
 
   role: Role.STUDENT;
   auths: IauthProvider[];

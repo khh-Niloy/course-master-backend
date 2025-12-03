@@ -3,6 +3,7 @@ import { authService } from "./auth.service";
 import { errorResponse, successResponse } from "../../utils/successResponse";
 import { logger } from "../../utils/logger";
 import { cookiesManagement } from "../../utils/cookiesManagement";
+import { JwtPayload } from "jsonwebtoken";
 
 const studentLogin = async (req: Request, res: Response) => {
   try {
@@ -82,9 +83,25 @@ const userLogOut = async (req: Request, res: Response) => {
   }
 };
 
+const getMe = async (req: Request, res: Response) => {
+  try {
+    const userInfo = req.user
+    const me = await authService.getMeService(userInfo as JwtPayload);
+    successResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "my info",
+      data: me,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const authController = {
   studentLogin,
   adminLogin,
   getNewAccessToken,
   userLogOut,
+  getMe,
 };
