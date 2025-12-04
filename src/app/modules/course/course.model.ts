@@ -2,63 +2,18 @@ import { model, Schema } from "mongoose";
 import {
   ICourse,
   ICourseModule,
-  ICourseBatch,
   ILesson,
-  IAssignment,
-  IQuizQuestion,
-  IQuizOption,
+  CourseStatus,
 } from "./course.interface";
 
-const quizOptionSchema = new Schema<IQuizOption>(
-  {
-    text: {
-      type: String,
-      required: true,
-    },
-    isCorrect: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  {
-    versionKey: false,
-    _id: false,
-  }
-);
-
-const quizQuestionSchema = new Schema<IQuizQuestion>(
-  {
-    question: {
-      type: String,
-      required: true,
-    },
-    options: {
-      type: [quizOptionSchema],
-      required: true,
-    },
-  },
-  {
-    versionKey: false,
-  }
-);
-
-const assignmentSchema = new Schema<IAssignment>(
-  {
-    question: {
-      type: String,
-      required: true,
-    },
-    instructions: {
-      type: String,
-    },
-  },
-  {
-    versionKey: false,
-  }
-);
+// Removed embedded quiz and assignment schemas - they are now separate collections
 
 const lessonSchema = new Schema<ILesson>(
   {
+    lessonNumber: {
+      type: Number,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -69,9 +24,6 @@ const lessonSchema = new Schema<ILesson>(
     },
     duration: {
       type: Number,
-    },
-    assignment: {
-      type: assignmentSchema,
     },
   },
   {
@@ -89,8 +41,14 @@ const courseModuleSchema = new Schema<ICourseModule>(
       type: [lessonSchema],
       required: true,
     },
-    quiz: {
-      type: [quizQuestionSchema],
+    // Reference quiz and assignment IDs instead of embedding
+    quizIds: {
+      type: [Schema.Types.ObjectId],
+      ref: "Quiz",
+    },
+    assignmentId: {
+      type: Schema.Types.ObjectId,
+      ref: "Assignment",
     },
   },
   {
@@ -98,24 +56,7 @@ const courseModuleSchema = new Schema<ICourseModule>(
   }
 );
 
-const courseBatchSchema = new Schema<ICourseBatch>(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-    },
-  },
-  {
-    versionKey: false,
-  }
-);
+// Batches are now handled by a separate Batch module
 
 const courseSchema = new Schema<ICourse>(
   {
@@ -152,9 +93,10 @@ const courseSchema = new Schema<ICourse>(
       type: [courseModuleSchema],
       required: true,
     },
-    batches: {
-      type: [courseBatchSchema],
-      required: true,
+    status: {
+      type: String,
+      enum: Object.values(CourseStatus),
+      default: CourseStatus.PUBLISHED,
     },
   },
   {

@@ -3,6 +3,9 @@ import { Router } from "express";
 import { authRoutes } from "../app/modules/auth/auth.routes";
 import { courseRoutes } from "../app/modules/course/course.routes";
 import { userRoutes } from "../app/modules/user/user.routes";
+import { quizRoutes } from "../app/modules/quiz/quiz.routes";
+import { assignmentRoutes } from "../app/modules/assignment/assignment.routes";
+import { batchRoutes } from "../app/modules/batch/batch.routes";
 
 
 export const routes = Router();
@@ -23,6 +26,18 @@ const allRoutes = [
   {
     path: "/courses",
     route: courseRoutes,
+  },
+  {
+    path: "/quizzes",
+    route: quizRoutes,
+  },
+  {
+    path: "/assignments",
+    route: assignmentRoutes,
+  },
+  {
+    path: "/batches",
+    route: batchRoutes,
   },
 ];
 

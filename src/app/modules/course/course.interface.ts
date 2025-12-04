@@ -2,47 +2,31 @@ import { Types } from "mongoose";
 
 export interface ILesson {
   _id?: Types.ObjectId;
+  lessonNumber: number;
   title: string;
   videoUrl: string;
   duration?: number;
-  assignment?: IAssignment;
-}
-
-export interface IAssignment {
-  _id?: Types.ObjectId;
-  question: string;
-  instructions?: string;
-}
-
-export interface IQuizOption {
-  text: string;
-  isCorrect: boolean;
-}
-
-export interface IQuizQuestion {
-  _id?: Types.ObjectId;
-  question: string;
-  options: IQuizOption[];
 }
 
 export interface ICourseModule {
   _id?: Types.ObjectId;
   title: string;
   lessons: ILesson[];
-  quiz?: IQuizQuestion[];
+  quizIds?: Types.ObjectId[];
+  assignmentId?: Types.ObjectId;
 }
 
-export interface ICourseBatch {
-  _id?: Types.ObjectId;
-  name: string;
-  startDate: Date;
-  endDate?: Date;
+export enum CourseStatus {
+  PUBLISHED = "PUBLISHED",
+  ARCHIVED = "ARCHIVED",
 }
 
-// export enum CourseStatus {
-//   DRAFT = "DRAFT",
-//   PUBLISHED = "PUBLISHED",
-//   ARCHIVED = "ARCHIVED",
+// export interface ICourseBatch {
+//   _id?: Types.ObjectId;
+//   name?: string;
+//   courseId: Types.ObjectId;
+//   startDate: Date;
+//   batchNumber: number;
 // }
 
 export interface ICourse {
@@ -62,9 +46,9 @@ export interface ICourse {
   //   discountPrice?: number;
 
   modules: ICourseModule[];
-  batches: ICourseBatch[];
+  // batches: ICourseBatch[];
 
-  //   status: CourseStatus;
+  status: CourseStatus;
 
   createdAt?: Date;
   updatedAt?: Date;
