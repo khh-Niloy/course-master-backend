@@ -84,10 +84,29 @@ const updateCourse = async (req: Request, res: Response) => {
   }
 };
 
+const patchCourse = async (req: Request, res: Response) => {
+  try {
+    const course = await courseService.patchCourseService(
+      req.params.slug,
+      req.body as Partial<ICourse>
+    );
+    successResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Course patched successfully",
+      data: course,
+    });
+  } catch (error) {
+    logger.log(error as Error, "error in patchCourse");
+    errorResponse(res, error as Error, 400);
+  }
+};
+
 export const courseController = {
   createCourse,
   getAllCourses,
   getCourseBySlug,
   updateCourse,
+  patchCourse,
   deleteCourse,
 };

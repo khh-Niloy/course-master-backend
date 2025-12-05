@@ -22,3 +22,9 @@ batchRoutes.get(
   roleBasedProtection(...Object.values(Role)),
   batchController.getBatchesByCourse
 );
+
+batchRoutes.patch(
+  "/:id",
+  roleBasedProtection(Role.ADMIN),
+  batchController.patchBatch
+);

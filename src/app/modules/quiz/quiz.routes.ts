@@ -16,3 +16,9 @@ quizRoutes.get(
   roleBasedProtection(Role.ADMIN),
   quizController.getAllQuizzes
 );
+
+quizRoutes.patch(
+  "/:id",
+  roleBasedProtection(Role.ADMIN),
+  quizController.patchQuiz
+);

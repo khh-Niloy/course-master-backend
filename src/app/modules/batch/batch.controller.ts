@@ -51,8 +51,27 @@ const getBatchesByCourse = async (req: Request, res: Response) => {
   }
 };
 
+const patchBatch = async (req: Request, res: Response) => {
+  try {
+    const batch = await batchService.patchBatchService(
+      req.params.id,
+      req.body as Partial<IBatch>
+    );
+    successResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Batch patched successfully",
+      data: batch,
+    });
+  } catch (error) {
+    logger.log(error as Error, "error in patchBatch");
+    errorResponse(res, error as Error, 400);
+  }
+};
+
 export const batchController = {
   createBatch,
   getAllBatches,
   getBatchesByCourse,
+  patchBatch,
 };

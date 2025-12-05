@@ -29,6 +29,12 @@ courseRoutes.put(
   courseController.updateCourse
 );
 
+courseRoutes.patch(
+  "/:slug",
+  roleBasedProtection(Role.ADMIN),
+  courseController.patchCourse
+);
+
 courseRoutes.delete(
   "/:slug",
   roleBasedProtection(Role.ADMIN),

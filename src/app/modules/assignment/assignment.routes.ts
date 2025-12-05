@@ -16,3 +16,9 @@ assignmentRoutes.get(
   roleBasedProtection(Role.ADMIN),
   assignmentController.getAllAssignments
 );
+
+assignmentRoutes.patch(
+  "/:id",
+  roleBasedProtection(Role.ADMIN),
+  assignmentController.patchAssignment
+);

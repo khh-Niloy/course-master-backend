@@ -27,8 +27,25 @@ const getBatchesByCourseService = async (courseId: string) => {
   return batches;
 };
 
+const patchBatchService = async (
+  id: string,
+  playLoad: Partial<IBatch>
+) => {
+  const batch = await Batch.findById(id);
+  if (!batch) {
+    throw new Error("Batch not found");
+  }
+  const updatedBatch = await Batch.findByIdAndUpdate(
+    id,
+    { $set: playLoad },
+    { new: true }
+  ).populate('courseId', 'title slug');
+  return updatedBatch;
+};
+
 export const batchService = {
   createBatchService,
   getAllBatchesService,
   getBatchesByCourseService,
+  patchBatchService,
 };

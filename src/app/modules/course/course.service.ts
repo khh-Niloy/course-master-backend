@@ -53,10 +53,34 @@ const updateCourseService = async (
   return updatedCourse;
 };
 
+const patchCourseService = async (
+  slug: string,
+  playLoad: Partial<ICourse>
+) => {
+  const isCourseExist = await Course.findOne({ slug });
+  if (!isCourseExist) {
+    throw new Error("Course not found");
+  }
+  if (playLoad.title && playLoad.title !== isCourseExist.title) {
+    const isTitleExist = await Course.findOne({ title: playLoad.title });
+    if (isTitleExist) {
+      throw new Error("Title already exists");
+    }
+    playLoad.slug = playLoad.title?.toLowerCase().replace(/ /g, "-") || "";
+  }
+  const updatedCourse = await Course.findOneAndUpdate(
+    { slug },
+    { $set: playLoad },
+    { new: true }
+  );
+  return updatedCourse;
+};
+
 export const courseService = {
   createCourseService,
   getAllCoursesService,
   getCourseBySlugService,
   updateCourseService,
+  patchCourseService,
   deleteCourseService,
 };
