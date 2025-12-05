@@ -13,13 +13,11 @@ interface IEnvVars {
   ADMIN_EMAIL: string;
   ADMIN_PASSWORD: string;
   FRONTEND_URL: string;
-  EMAIL_SENDER: {
-    SMTP_USER: string;
-    SMTP_PASS: string;
-    SMTP_PORT: string;
-    SMTP_HOST: string;
-    SMTP_FROM: string;
-  };
+  SMTP_USER: string;
+  SMTP_PASS: string;
+  SMTP_PORT: string;
+  SMTP_HOST: string;
+  SMTP_FROM: string;
 }
 
 const loadEnvVars = (): IEnvVars => {
@@ -58,13 +56,11 @@ const loadEnvVars = (): IEnvVars => {
     ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
     FRONTEND_URL: process.env.FRONTEND_URL as string,
-    EMAIL_SENDER: {
-      SMTP_USER: process.env.SMTP_USER as string,
-      SMTP_PASS: process.env.SMTP_PASS as string,
-      SMTP_PORT: process.env.SMTP_PORT as string,
-      SMTP_HOST: process.env.SMTP_HOST as string,
-      SMTP_FROM: process.env.SMTP_FROM as string,
-    },
+    SMTP_USER: process.env.SMTP_USER as string,
+    SMTP_PASS: process.env.SMTP_PASS as string,
+    SMTP_PORT: process.env.SMTP_PORT as string,
+    SMTP_HOST: process.env.SMTP_HOST as string,
+    SMTP_FROM: process.env.SMTP_FROM as string,
   };
 };
 

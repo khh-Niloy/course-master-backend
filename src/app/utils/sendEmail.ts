@@ -9,11 +9,11 @@ const transporter = nodemailer.createTransport({
     // port: envVars.EMAIL_SENDER.SMTP_PORT,
     secure: true,
     auth: {
-        user: envVars.EMAIL_SENDER.SMTP_USER,
-        pass: envVars.EMAIL_SENDER.SMTP_PASS
+        user: envVars.SMTP_USER,
+        pass: envVars.SMTP_PASS
     },
-    port: Number(envVars.EMAIL_SENDER.SMTP_PORT),
-    host: envVars.EMAIL_SENDER.SMTP_HOST
+    port: Number(envVars.SMTP_PORT),
+    host: envVars.SMTP_HOST
 })
 
 interface SendEmailOptions {
@@ -39,7 +39,7 @@ export const sendEmail = async ({
         const templatePath = path.join(__dirname, `templates/${templateName}.ejs`)
         const html = await ejs.renderFile(templatePath, templateData)
         const info = await transporter.sendMail({
-            from: envVars.EMAIL_SENDER.SMTP_FROM,
+            from: envVars.SMTP_FROM,
             to: to,
             subject: subject,
             html: html,
@@ -49,7 +49,7 @@ export const sendEmail = async ({
                 contentType: attachment.contentType
             }))
         })
-        logger.log(`\u2709\uFE0F Email sent to ${to}: ${info.messageId}`);
+        logger.log(`Email sent to ${to}: ${info.messageId}`);
     } catch (error: any) {
         logger.log("email sending error", error.message);
         throw new Error("Email error")

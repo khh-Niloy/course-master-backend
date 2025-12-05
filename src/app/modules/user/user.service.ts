@@ -43,7 +43,7 @@ const createUserService = async (playLoad: Partial<IUser>) => {
         appName: "Course Master",
         ctaUrl: envVars.FRONTEND_URL,
         ctaLabel: "Go to dashboard",
-        supportEmail: envVars.EMAIL_SENDER.SMTP_FROM,
+        supportEmail: envVars.SMTP_FROM,
         year: new Date().getFullYear(),
       },
     });
