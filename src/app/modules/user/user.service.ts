@@ -3,6 +3,7 @@ import { IauthProvider, IUser } from "./user.interface";
 import { User } from "./user.model";
 import bcryptjs from "bcryptjs";
 import { logger } from "../../utils/logger";
+import { sendEmail } from "../../utils/sendEmail";
 import { jwtManagement } from "../../utils/jwtManagement";
 
 const createUserService = async (playLoad: Partial<IUser>) => {
@@ -30,6 +31,25 @@ const createUserService = async (playLoad: Partial<IUser>) => {
     auths: [authProvider],
     ...rest,
   });
+
+  const firstName = (rest?.name ?? "").split(" ")[0];
+  try {
+    await sendEmail({
+      to: email as string,
+      subject: "Welcome to Course Master",
+      templateName: "greeting",
+      templateData: {
+        firstName: firstName || undefined,
+        appName: "Course Master",
+        ctaUrl: envVars.FRONTEND_URL,
+        ctaLabel: "Go to dashboard",
+        supportEmail: envVars.EMAIL_SENDER.SMTP_FROM,
+        year: new Date().getFullYear(),
+      },
+    });
+  } catch (emailError) {
+    logger.log(emailError as Error, "failed to send welcome email");
+  }
 
   const jwtPayload = {
     userId: newCreatedUser._id,
