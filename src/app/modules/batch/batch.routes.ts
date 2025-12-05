@@ -13,12 +13,12 @@ batchRoutes.post(
 
 batchRoutes.get(
   "/",
-  roleBasedProtection(Role.ADMIN),
+  roleBasedProtection(...Object.values(Role)),
   batchController.getAllBatches
 );
 
 batchRoutes.get(
   "/course/:courseId",
-  roleBasedProtection(Role.ADMIN),
+  roleBasedProtection(...Object.values(Role)),
   batchController.getBatchesByCourse
 );

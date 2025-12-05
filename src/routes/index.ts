@@ -6,6 +6,7 @@ import { userRoutes } from "../app/modules/user/user.routes";
 import { quizRoutes } from "../app/modules/quiz/quiz.routes";
 import { assignmentRoutes } from "../app/modules/assignment/assignment.routes";
 import { batchRoutes } from "../app/modules/batch/batch.routes";
+import { enrollmentRoutes } from "../app/modules/enrollment/enrollment.routes";
 
 
 export const routes = Router();
@@ -38,6 +39,10 @@ const allRoutes = [
   {
     path: "/batches",
     route: batchRoutes,
+  },
+  {
+    path: "/enrollments",
+    route: enrollmentRoutes,
   },
 ];
 
