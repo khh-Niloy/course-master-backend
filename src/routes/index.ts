@@ -7,6 +7,7 @@ import { quizRoutes } from "../app/modules/quiz/quiz.routes";
 import { assignmentRoutes } from "../app/modules/assignment/assignment.routes";
 import { batchRoutes } from "../app/modules/batch/batch.routes";
 import { enrollmentRoutes } from "../app/modules/enrollment/enrollment.routes";
+import { progressRoutes } from "../app/modules/progress/progress.routes";
 
 
 export const routes = Router();
@@ -43,6 +44,10 @@ const allRoutes = [
   {
     path: "/enrollments",
     route: enrollmentRoutes,
+  },
+  {
+    path: "/progress",
+    route: progressRoutes,
   },
 ];
 
