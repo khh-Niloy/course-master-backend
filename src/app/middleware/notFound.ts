@@ -4,5 +4,5 @@ import { NextFunction, Request, Response } from "express";
 import { errorResponse } from "../utils/successResponse";
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
-  errorResponse(res, new Error("route not found") as Error, 404);
+  errorResponse(res, new Error("Sorry, the page you're looking for doesn't exist.") as Error, 404);
 };

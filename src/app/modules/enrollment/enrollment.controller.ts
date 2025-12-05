@@ -12,7 +12,7 @@ const createEnrollment = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 201,
       success: true,
-      message: "Enrollment created successfully",
+      message: "Congratulations! You've been successfully enrolled in the course.",
       data: enrollment,
     });
   } catch (error) {
@@ -27,7 +27,7 @@ const getAllEnrollments = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Enrollments fetched successfully",
+      message: "Enrollments retrieved successfully.",
       data: enrollments,
     });
   } catch (error) {
@@ -42,7 +42,7 @@ const getEnrollmentsByStudent = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Student enrollments fetched successfully",
+      message: "Your enrollments have been retrieved successfully.",
       data: enrollments,
     });
   } catch (error) {
@@ -57,7 +57,7 @@ const getEnrollmentsByCourse = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Course enrollments fetched successfully",
+      message: "Course enrollments retrieved successfully.",
       data: enrollments,
     });
   } catch (error) {

@@ -33,7 +33,7 @@ const patchBatchService = async (
 ) => {
   const batch = await Batch.findById(id);
   if (!batch) {
-    throw new Error("Batch not found");
+    throw new Error("Sorry, we couldn't find the batch you're looking for.");
   }
   const updatedBatch = await Batch.findByIdAndUpdate(
     id,

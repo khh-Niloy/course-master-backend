@@ -2,6 +2,7 @@ import { IProgress, IEnrollmentProgress } from "./progress.interface";
 import { Progress } from "./progress.model";
 import { Enrollment } from "../enrollment/enrollment.model";
 import { Course } from "../course/course.model";
+import { Types } from "mongoose";
 
 const markLessonCompleteService = async (
   studentId: string,
@@ -19,7 +20,7 @@ const markLessonCompleteService = async (
     });
 
   if (!enrollment) {
-    throw new Error("Enrollment not found for this student");
+    throw new Error("Sorry, we couldn't find your enrollment. Please make sure you're enrolled in a course first.");
   }
 
   // Check if lesson exists in the course
@@ -29,14 +30,14 @@ const markLessonCompleteService = async (
   );
 
   if (!lessonExists) {
-    throw new Error("Lesson not found in enrolled course");
+    throw new Error("Sorry, we couldn't find this lesson in your enrolled course.");
   }
 
   // Create or update progress
   const progressData: Partial<IProgress> = {
     studentId: enrollment.studentId,
     enrollmentId: enrollment._id,
-    lessonId,
+    lessonId: new Types.ObjectId(lessonId),
     completed: true,
     completedAt: new Date(),
     timeSpent: timeSpent || 0,
@@ -78,7 +79,7 @@ const calculateEnrollmentProgressService = async (
     .populate('courseId');
 
   if (!enrollment) {
-    throw new Error("Enrollment not found");
+    throw new Error("Sorry, we couldn't find the enrollment you're looking for.");
   }
 
   const course = enrollment.courseId as any;

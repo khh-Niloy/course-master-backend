@@ -17,6 +17,38 @@ assignmentRoutes.get(
   assignmentController.getAllAssignments
 );
 
+// More specific routes first (before /:id)
+assignmentRoutes.get(
+  "/submissions/all",
+  roleBasedProtection(Role.ADMIN),
+  assignmentController.getAllSubmissions
+);
+
+assignmentRoutes.post(
+  "/:id/submit",
+  roleBasedProtection(Role.STUDENT),
+  assignmentController.submitAssignment
+);
+
+assignmentRoutes.get(
+  "/:assignmentId/submission",
+  roleBasedProtection(Role.STUDENT),
+  assignmentController.getAssignmentSubmission
+);
+
+assignmentRoutes.patch(
+  "/submissions/:submissionId/review",
+  roleBasedProtection(Role.ADMIN),
+  assignmentController.reviewAssignment
+);
+
+// Generic routes last
+assignmentRoutes.get(
+  "/:id",
+  roleBasedProtection(...Object.values(Role)),
+  assignmentController.getAssignmentById
+);
+
 assignmentRoutes.patch(
   "/:id",
   roleBasedProtection(Role.ADMIN),

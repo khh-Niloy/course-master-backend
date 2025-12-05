@@ -52,7 +52,7 @@ export const sendEmail = async ({
         logger.log(`Email sent to ${to}: ${info.messageId}`);
     } catch (error: any) {
         logger.log("email sending error", error.message);
-        throw new Error("Email error")
+        throw new Error("We encountered an issue sending the email. Please try again later or contact support.")
     }
 
 }

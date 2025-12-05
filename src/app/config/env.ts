@@ -41,7 +41,7 @@ const loadEnvVars = (): IEnvVars => {
   ];
   requiredEnvVar.forEach((key) => {
     if (!process.env[key]) {
-      throw new Error(`env not found error -> ${key}`);
+      throw new Error(`Configuration error: Required environment variable '${key}' is missing. Please check your environment configuration.`);
     }
   });
   return {

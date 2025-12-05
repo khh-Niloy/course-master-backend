@@ -11,7 +11,7 @@ export const roleBasedProtection =
     const accessToken = req.cookies.accessToken;
 
     if (!accessToken) {
-      throw new Error("access token not found!");
+      throw new Error("Please log in to access this resource.");
     }
 
     console.log({ accessToken });
@@ -24,18 +24,18 @@ export const roleBasedProtection =
     const user = await User.findById(userInfoJWTAccessToken.userId);
 
     if (!user) {
-      throw new Error("user found!");
+      throw new Error("User account not found. Please contact support.");
     }
 
     if (
       user?.isActive === isActive.BLOCKED ||
       user?.isActive === isActive.INACTIVE
     ) {
-      throw new Error(`user is ${user?.isActive}!`);
+      throw new Error(`Your account is currently ${user?.isActive === isActive.BLOCKED ? "blocked" : "inactive"}. Please contact support for assistance.`);
     }
 
     if (user?.isDeleted) {
-      throw new Error("user is deleted!");
+      throw new Error("Your account has been deleted. Please contact support if you believe this is an error.");
     }
 
     // if (!user?.isVerified) {
@@ -43,7 +43,7 @@ export const roleBasedProtection =
     // }
 
     if (!Object.values(roles).includes(userInfoJWTAccessToken.role)) {
-      throw new Error("You are not permitted to view this route!!!");
+      throw new Error("You don't have permission to access this resource. Please contact an administrator if you believe this is an error.");
     }
 
     req.user = userInfoJWTAccessToken;

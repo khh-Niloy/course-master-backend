@@ -12,10 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin:
-      envVars.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : envVars.FRONTEND_URL,
+    origin: "https://course-master-frontend-five.vercel.app",
     credentials: true,
   })
 );

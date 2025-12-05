@@ -12,7 +12,7 @@ const createBatch = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 201,
       success: true,
-      message: "Batch created successfully",
+      message: "Batch created successfully!",
       data: batch,
     });
   } catch (error) {
@@ -27,7 +27,7 @@ const getAllBatches = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Batches fetched successfully",
+      message: "Batches retrieved successfully.",
       data: batches,
     });
   } catch (error) {
@@ -42,7 +42,7 @@ const getBatchesByCourse = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Course batches fetched successfully",
+      message: "Course batches retrieved successfully.",
       data: batches,
     });
   } catch (error) {
@@ -60,7 +60,7 @@ const patchBatch = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Batch patched successfully",
+      message: "Batch has been updated successfully.",
       data: batch,
     });
   } catch (error) {

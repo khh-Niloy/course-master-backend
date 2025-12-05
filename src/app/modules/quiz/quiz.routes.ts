@@ -17,6 +17,26 @@ quizRoutes.get(
   quizController.getAllQuizzes
 );
 
+// More specific routes first
+quizRoutes.post(
+  "/:id/submit",
+  roleBasedProtection(Role.STUDENT),
+  quizController.submitQuizResult
+);
+
+quizRoutes.get(
+  "/:quizId/result",
+  roleBasedProtection(Role.STUDENT),
+  quizController.getQuizResult
+);
+
+// Generic routes last
+quizRoutes.get(
+  "/:id",
+  roleBasedProtection(...Object.values(Role)),
+  quizController.getQuizById
+);
+
 quizRoutes.patch(
   "/:id",
   roleBasedProtection(Role.ADMIN),

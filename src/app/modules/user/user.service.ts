@@ -12,7 +12,7 @@ const createUserService = async (playLoad: Partial<IUser>) => {
 
   const isUserExist = await User.findOne({ email });
   if (isUserExist) {
-    throw new Error("You already have an account, please login");
+    throw new Error("An account with this email already exists. Please log in instead.");
   }
 
   const hashedPassword = await bcryptjs.hash(

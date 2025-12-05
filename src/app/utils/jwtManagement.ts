@@ -43,13 +43,13 @@ export const getNewAccessTokenFromRefreshToken = async (
   );
 
   if (!userInfoFromRefreshToken) {
-    throw new Error("refresh token does not exist");
+    throw new Error("Your session has expired. Please log in again.");
   }
 
   const user = await User.findById((userInfoFromRefreshToken as JwtPayload).userId);
 
   if (!user) {
-    throw new Error("user does not exist");
+    throw new Error("User account not found. Please contact support.");
   }
 
   const jwtPayload = {

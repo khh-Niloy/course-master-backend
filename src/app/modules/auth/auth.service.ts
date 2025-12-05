@@ -14,18 +14,18 @@ const userLoginService = async (playLoad: {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error("You Dont have any account, please register first");
+    throw new Error("No account found with this email. Please register first or check your email address.");
   }
 
   if (
     user?.isActive === isActive.BLOCKED ||
     user?.isActive === isActive.INACTIVE
   ) {
-    throw new Error(`user is ${user?.isActive}!`);
+    throw new Error(`Your account is currently ${user?.isActive === isActive.BLOCKED ? "blocked" : "inactive"}. Please contact support for assistance.`);
   }
 
   if (user?.isDeleted) {
-    throw new Error("user is deleted!");
+    throw new Error("Your account has been deleted. Please contact support if you believe this is an error.");
   }
 
   // if (!user?.isVerified) {
@@ -38,7 +38,7 @@ const userLoginService = async (playLoad: {
   );
 
   if (!checkPassword) {
-    throw new Error("password did not match!");
+    throw new Error("Invalid password. Please check your password and try again.");
   }
 
   const jwtPayload = {

@@ -12,7 +12,7 @@ const createCourse = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 201,
       success: true,
-      message: "Course created successfully",
+      message: "Course created successfully!",
       data: course,
     });
   } catch (error) {
@@ -27,7 +27,7 @@ const getAllCourses = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Courses fetched successfully",
+      message: "Courses retrieved successfully.",
       data: courses,
     });
   } catch (error) {
@@ -42,7 +42,7 @@ const getCourseBySlug = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Course fetched successfully",
+      message: "Course details retrieved successfully.",
       data: course,
     });
   } catch (error) {
@@ -57,7 +57,7 @@ const deleteCourse = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Course deleted successfully",
+      message: "Course has been deleted successfully.",
       data: course,
     });
   } catch (error) {
@@ -75,7 +75,7 @@ const updateCourse = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Course updated successfully",
+      message: "Course has been updated successfully.",
       data: course,
     });
   } catch (error) {
@@ -93,7 +93,7 @@ const patchCourse = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Course patched successfully",
+      message: "Course has been updated successfully.",
       data: course,
     });
   } catch (error) {

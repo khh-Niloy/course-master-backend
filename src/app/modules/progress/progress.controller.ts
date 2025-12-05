@@ -4,7 +4,7 @@ import { errorResponse, successResponse } from "../../utils/successResponse";
 import { logger } from "../../utils/logger";
 import { JwtPayload } from "jsonwebtoken";
 
-interface AuthenticatedRequest extends Request {
+interface AuthenticatedRequest extends Omit<Request, 'user'> {
   user?: JwtPayload;
 }
 
@@ -15,7 +15,7 @@ const markLessonComplete = async (req: AuthenticatedRequest, res: Response) => {
     const studentId = req.user?.userId;
 
     if (!studentId) {
-      return errorResponse(res, new Error("Student ID not found"), 401);
+      return errorResponse(res, new Error("Please log in to access this feature."), 401);
     }
 
     const progress = await progressService.markLessonCompleteService(
@@ -27,7 +27,7 @@ const markLessonComplete = async (req: AuthenticatedRequest, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Lesson marked as complete",
+      message: "Great job! Lesson marked as complete.",
       data: progress,
     });
   } catch (error) {
@@ -42,7 +42,7 @@ const markLessonIncomplete = async (req: AuthenticatedRequest, res: Response) =>
     const studentId = req.user?.userId;
 
     if (!studentId) {
-      return errorResponse(res, new Error("Student ID not found"), 401);
+      return errorResponse(res, new Error("Please log in to access this feature."), 401);
     }
 
     const result = await progressService.markLessonIncompleteService(
@@ -53,7 +53,7 @@ const markLessonIncomplete = async (req: AuthenticatedRequest, res: Response) =>
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Lesson marked as incomplete",
+      message: "Lesson has been marked as incomplete.",
       data: result,
     });
   } catch (error) {
@@ -70,7 +70,7 @@ const getProgressByEnrollment = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Progress fetched successfully",
+      message: "Progress information retrieved successfully.",
       data: progress,
     });
   } catch (error) {
@@ -87,7 +87,7 @@ const getEnrollmentProgress = async (req: Request, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Enrollment progress calculated successfully",
+      message: "Your enrollment progress has been calculated successfully.",
       data: progress,
     });
   } catch (error) {
@@ -101,7 +101,7 @@ const getStudentProgress = async (req: AuthenticatedRequest, res: Response) => {
     const studentId = req.user?.userId;
 
     if (!studentId) {
-      return errorResponse(res, new Error("Student ID not found"), 401);
+      return errorResponse(res, new Error("Please log in to access this feature."), 401);
     }
 
     const progress = await progressService.getStudentProgressService(studentId);
@@ -109,7 +109,7 @@ const getStudentProgress = async (req: AuthenticatedRequest, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Student progress fetched successfully",
+      message: "Your progress has been retrieved successfully.",
       data: progress,
     });
   } catch (error) {
@@ -124,7 +124,7 @@ const getLessonProgress = async (req: AuthenticatedRequest, res: Response) => {
     const studentId = req.user?.userId;
 
     if (!studentId) {
-      return errorResponse(res, new Error("Student ID not found"), 401);
+      return errorResponse(res, new Error("Please log in to access this feature."), 401);
     }
 
     const progress = await progressService.getLessonProgressService(studentId, lessonId);
@@ -132,7 +132,7 @@ const getLessonProgress = async (req: AuthenticatedRequest, res: Response) => {
     successResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Lesson progress fetched successfully",
+      message: "Lesson progress retrieved successfully.",
       data: progress,
     });
   } catch (error) {

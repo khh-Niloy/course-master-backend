@@ -12,8 +12,8 @@ export const globalErrorHandler = async(
 
   res.status(500).json({
     success: false,
-    message: `something went wrong : ${err.message}`,
-    err,
-    stack: envVars.NODE_ENV == "development" ? err.stack : null,
+    message: `Oops! Something went wrong. Please try again later. ${envVars.NODE_ENV === "development" ? `Error: ${err.message}` : ""}`,
+    err: envVars.NODE_ENV === "development" ? err : undefined,
+    stack: envVars.NODE_ENV === "development" ? err.stack : null,
   });
 };

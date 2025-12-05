@@ -10,7 +10,7 @@ const createEnrollmentService = async (playLoad: Partial<IEnrollment>) => {
   });
 
   if (existingEnrollment) {
-    throw new Error("Student is already enrolled in this batch");
+    throw new Error("You are already enrolled in this batch. Please choose a different batch or course.");
   }
 
   const newEnrollment = await Enrollment.create(playLoad);
