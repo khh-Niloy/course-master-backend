@@ -1,0 +1,44 @@
+import { Router } from "express";
+import { Role } from "../user/user.interface";
+import { roleBasedProtection } from "../../middleware/roleBasedProtection";
+import { quizController } from "./quiz.controller";
+
+export const quizRoutes = Router();
+
+quizRoutes.post(
+  "/",
+  roleBasedProtection(Role.ADMIN),
+  quizController.createQuiz
+);
+
+quizRoutes.get(
+  "/",
+  roleBasedProtection(Role.ADMIN),
+  quizController.getAllQuizzes
+);
+
+// More specific routes first
+quizRoutes.post(
+  "/:id/submit",
+  roleBasedProtection(Role.STUDENT),
+  quizController.submitQuizResult
+);
+
+quizRoutes.get(
+  "/:quizId/result",
+  roleBasedProtection(Role.STUDENT),
+  quizController.getQuizResult
+);
+
+// Generic routes last
+quizRoutes.get(
+  "/:id",
+  roleBasedProtection(...Object.values(Role)),
+  quizController.getQuizById
+);
+
+quizRoutes.patch(
+  "/:id",
+  roleBasedProtection(Role.ADMIN),
+  quizController.patchQuiz
+);

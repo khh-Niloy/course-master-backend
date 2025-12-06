@@ -1,0 +1,145 @@
+import { model, Schema } from "mongoose";
+import {
+  ICourseEnrollment,
+  EnrollmentStatus,
+  IUser,
+  IauthProvider,
+  isActive,
+  Role,
+} from "./user.interface";
+const authProviderSchema = new Schema<IauthProvider>(
+  {
+    provider: {
+      type: String,
+      enum: ["google", "credential"],
+      required: true,
+    },
+    providerId: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    versionKey: false,
+    _id: false,
+  }
+);
+
+const courseEnrollmentSchema = new Schema<ICourseEnrollment>(
+  {
+    courseId: {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
+    enrolledAt: {
+      type: Date,
+      default: Date.now,
+    },
+    status: {
+      type: String,
+      enum: Object.values(EnrollmentStatus),
+      default: EnrollmentStatus.ENROLLED,
+    },
+    progress: {
+      type: Number,
+      default: 0,
+    },
+    completedAt: {
+      type: Date,
+    },
+    certificateIssued: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    versionKey: false,
+    _id: false,
+  }
+);
+
+const userSchema = new Schema<IUser>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+    },
+    picture: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    isActive: {
+      type: String,
+      enum: Object.values(isActive),
+      default: isActive.ACTIVE,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    role: {
+      type: String,
+      enum: Object.values(Role),
+      required: true,
+      default: Role.STUDENT,
+    },
+    auths: {
+      type: [authProviderSchema],
+      required: true,
+    },
+
+    enrollments: {
+      type: [courseEnrollmentSchema],
+    },
+    institution: {
+      type: String,
+    },
+    major: {
+      type: String,
+    },
+    graduationYear: {
+      type: Number,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
+
+// Indexes for better query performance
+userSchema.index({ email: 1 }); // Already unique, but explicit index for login queries
+userSchema.index({ role: 1 }); // For filtering by role
+userSchema.index({ isActive: 1 }); // For filtering active/blocked users
+userSchema.index({ isDeleted: 1 }); // For filtering non-deleted users
+
+export const User = model<IUser>("User", userSchema);
