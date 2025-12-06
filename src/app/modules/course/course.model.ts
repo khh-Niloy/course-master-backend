@@ -105,4 +105,9 @@ const courseSchema = new Schema<ICourse>(
   }
 );
 
+// Indexes for better query performance
+courseSchema.index({ slug: 1 }); // Already unique, but explicit index for lookups
+courseSchema.index({ category: 1 }); // For filtering by category
+courseSchema.index({ status: 1 }); // For filtering by status
+
 export const Course = model<ICourse>("Course", courseSchema);

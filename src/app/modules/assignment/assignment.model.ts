@@ -28,7 +28,6 @@ const assignmentSchema = new Schema<IAssignment>(
   }
 );
 
-// Index for better search performance
 assignmentSchema.index({ title: 1 });
 
 export const Assignment = model<IAssignment>("Assignment", assignmentSchema);

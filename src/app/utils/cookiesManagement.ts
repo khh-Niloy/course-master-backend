@@ -9,16 +9,16 @@ export const setCookie = (
   if (accessToken) {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: envVars.NODE_ENV === "production",
-      sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
     });
   }
 
   if (refreshToken) {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: envVars.NODE_ENV === "production",
-      sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+       sameSite: "none",
     });
   }
 };
@@ -26,13 +26,13 @@ export const setCookie = (
 export const clearCookie = (res: Response) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
-    secure: envVars.NODE_ENV === "production",
+    sameSite: "none",
+    secure: true,
   });
   res.clearCookie("accessToken", {
     httpOnly: true,
-    sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
-    secure: envVars.NODE_ENV === "production",
+    sameSite: "none",
+    secure: true,
   });
 };
 

@@ -136,4 +136,10 @@ const userSchema = new Schema<IUser>(
   }
 );
 
+// Indexes for better query performance
+userSchema.index({ email: 1 }); // Already unique, but explicit index for login queries
+userSchema.index({ role: 1 }); // For filtering by role
+userSchema.index({ isActive: 1 }); // For filtering active/blocked users
+userSchema.index({ isDeleted: 1 }); // For filtering non-deleted users
+
 export const User = model<IUser>("User", userSchema);
